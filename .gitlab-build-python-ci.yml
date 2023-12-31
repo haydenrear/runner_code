@@ -9,15 +9,16 @@ image: python:3.10
     - ml-code
   only:
     - main
+  before_script:
+    - python3 -m venv phx || true
+    - source phx/bin/activate
+    - echo "$CI_SERVER_URL is the url"
 
 
 do_build:
   extends: .phx-job
   stage: build
   script:
-    - python3 -m venv phx || true
-    - source phx/bin/activate
-    - echo "$CI_SERVER_URL is the url"
     - pip install wheel
     - pip install -r requirements.txt
     - python setup.py sdist bdist_wheel
