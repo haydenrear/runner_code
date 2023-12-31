@@ -32,4 +32,4 @@ do_deploy:
   stage: deploy
   script:
     - pip install twine
-    - twine upload dist/* --repository-url $CI_SERVER_URL/projects/$CI_PROJECT_ID/packages/pypi --username $PACKAGE_REGISTRY_USERNAME --password $PACKAGE_REGISTRY_PASSWORD
+    - TWINE_PASSWORD=${CI_JOB_TOKEN} TWINE_USERNAME=gitlab-ci-token twine upload --repository-url $CI_SERVER_URL/projects/$CI_PROJECT_ID/packages/pypi
