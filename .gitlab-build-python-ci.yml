@@ -1,7 +1,12 @@
 image: python:3.10
 
+
 do_build:
   stage: build
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}  # Use a unique key for each branch or tag
+    paths:
+      - .cache/pip
   tags:
     - ml-code
   script:
@@ -18,8 +23,12 @@ do_deploy:
   stage: deploy
   script:
     - pip install twine
-    - twine upload dist/* --repository-url http://localhost/projects/$CI_PROJECT_ID/packages/pypi --username $PACKAGE_REGISTRY_USERNAME --password $PACKAGE_REGISTRY_PASSWORD
+    - twine upload dist/* --repository-url $CI_SERVER_URL/projects/$CI_PROJECT_ID/packages/pypi --username $PACKAGE_REGISTRY_USERNAME --password $PACKAGE_REGISTRY_PASSWORD
   only:
     - main
   tags:
     - ml-code
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}  # Use a unique key for each branch or tag
+    paths:
+      - .cache/pip
