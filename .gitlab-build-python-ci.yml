@@ -5,6 +5,7 @@ do_build:
   tags:
     - ml-code
   script:
+    - echo "$CI_SERVER_URL is the url"
     - pip install wheel
     - pip install -r requirements.txt
     - python setup.py sdist bdist_wheel
@@ -17,7 +18,7 @@ do_deploy:
   stage: deploy
   script:
     - pip install twine
-    - twine upload dist/* --repository-url $CI_API_V4_URL/projects/$CI_PROJECT_ID/packages/pypi --username $PACKAGE_REGISTRY_USERNAME --password $PACKAGE_REGISTRY_PASSWORD
+    - twine upload dist/* --repository-url http://localhost/projects/$CI_PROJECT_ID/packages/pypi --username $PACKAGE_REGISTRY_USERNAME --password $PACKAGE_REGISTRY_PASSWORD
   only:
     - main
   tags:
