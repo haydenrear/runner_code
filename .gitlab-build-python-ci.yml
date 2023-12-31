@@ -1,34 +1,34 @@
 image: python:3.10
 
-
-do_build:
-  stage: build
+.phx-job:
   cache:
-    key: ${CI_COMMIT_REF_SLUG}  # Use a unique key for each branch or tag
+    key: phx  # Use a unique key for each branch or tag
     paths:
-      - .cache/pip
+      - phx
   tags:
     - ml-code
+  only:
+    - main
+
+
+do_build:
+  extends: .phx-job
+  stage: build
   script:
+    - py -m venv phx || true
+    - source phx/bin/activate
     - echo "$CI_SERVER_URL is the url"
-    - pip install --cache-dir .cache/pip wheel
-    - pip install --cache-dir .cache/pip -r requirements.txt
+    - pip install wheel
+    - pip install -r requirements.txt
     - python setup.py sdist bdist_wheel
-    - pip install --cache-dir .cache/pip .
+    - pip install .
   artifacts:
     paths:
       - dist/
 
 do_deploy:
   stage: deploy
+  extends: .phx-job
   script:
     - pip install twine
     - twine upload dist/* --repository-url $CI_SERVER_URL/projects/$CI_PROJECT_ID/packages/pypi --username $PACKAGE_REGISTRY_USERNAME --password $PACKAGE_REGISTRY_PASSWORD
-  only:
-    - main
-  tags:
-    - ml-code
-  cache:
-    key: ${CI_COMMIT_REF_SLUG}  # Use a unique key for each branch or tag
-    paths:
-      - .cache/pip
