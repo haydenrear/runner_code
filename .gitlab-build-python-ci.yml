@@ -1,6 +1,6 @@
 image: python:3.9
 
-build:
+do_build:
   stage: build
   tags:
     - ml-code
@@ -11,7 +11,7 @@ build:
     paths:
       - dist/
 
-deploy:
+do_deploy:
   stage: deploy
   script:
     - pip install twine
