@@ -11,10 +11,10 @@ do_build:
     - ml-code
   script:
     - echo "$CI_SERVER_URL is the url"
-    - pip install wheel
-    - pip install -r requirements.txt
+    - pip install --cache-dir .cache/pip wheel
+    - pip install --cache-dir .cache/pip -r requirements.txt
     - python setup.py sdist bdist_wheel
-    - pip install .
+    - pip install --cache-dir .cache/pip .
   artifacts:
     paths:
       - dist/
