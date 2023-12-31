@@ -15,7 +15,7 @@ do_build:
   extends: .phx-job
   stage: build
   script:
-    - py -m venv phx || true
+    - python3 -m venv phx || true
     - source phx/bin/activate
     - echo "$CI_SERVER_URL is the url"
     - pip install wheel
@@ -27,8 +27,8 @@ do_build:
       - dist/
 
 do_deploy:
-  stage: deploy
   extends: .phx-job
+  stage: deploy
   script:
     - pip install twine
     - twine upload dist/* --repository-url $CI_SERVER_URL/projects/$CI_PROJECT_ID/packages/pypi --username $PACKAGE_REGISTRY_USERNAME --password $PACKAGE_REGISTRY_PASSWORD
