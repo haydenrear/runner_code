@@ -5,7 +5,6 @@ image: python:3.10
     key: phx  # Use a unique key for each branch or tag
     paths:
       - phx
-  push: false
   tags:
     - ml-code
   only:
