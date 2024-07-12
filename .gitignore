@@ -44,4 +44,4 @@ build/
 .gradle
 *.hprof
 
-./.images/*
+.images/*
