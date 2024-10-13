@@ -25,15 +25,17 @@ wrapDocker {
     )
 }
 
-afterEvaluate {
-    tasks.getByPath("pgVectorPostgresDockerImage").dependsOn("startRegistry")
-    tasks.getByPath("pushImages").dependsOn("startRegistry")
+if (!project.hasProperty("disable-docker")) {
+    afterEvaluate {
+        tasks.getByPath("pgVectorPostgresDockerImage").dependsOn("startRegistry")
+        tasks.getByPath("pushImages").dependsOn("startRegistry")
 
-    tasks.register("startRegistry") {
-        println("Starting Registry...")
-        exec {
-            workingDir("src/main/docker")
-            commandLine("/usr/local/bin/docker-compose",  "up",  "-d")
+        tasks.register("startRegistry") {
+            println("Starting Registry...")
+            exec {
+                workingDir("src/main/docker")
+                commandLine("/usr/local/bin/docker-compose", "up", "-d")
+            }
         }
     }
 }
