@@ -25,7 +25,7 @@ wrapDocker {
     )
 }
 
-if (!project.hasProperty("disable-docker")) {
+if (project.property("enable-docker")?.toString()?.toBoolean() == true) {
     afterEvaluate {
         tasks.getByPath("pgVectorPostgresDockerImage").dependsOn("startRegistry")
         tasks.getByPath("pushImages").dependsOn("startRegistry")
