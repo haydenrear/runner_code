@@ -26,14 +26,23 @@ wrapDocker {
 }
 
 if (project.property("enable-docker")?.toString()?.toBoolean() == true) {
-    afterEvaluate {
+    tasks.getByPath("jar").finalizedBy("buildDocker")
+
+    tasks.getByPath("jar").doLast {
         tasks.getByPath("pgVectorPostgresDockerImage").dependsOn("startRegistry")
         tasks.getByPath("pushImages").dependsOn("startRegistry")
+    }
+
+    tasks.register("buildDocker") {
+        dependsOn("bootJar", "startRegistry", "pgVectorPostgresDockerImage", "pushImages")
+    }
+    afterEvaluate {
 
         tasks.register("startRegistry") {
             println("Starting Registry...")
+
             exec {
-                workingDir("src/main/docker")
+                workingDir("runner_code/src/main/docker")
                 commandLine("/usr/local/bin/docker-compose", "up", "-d")
             }
         }
