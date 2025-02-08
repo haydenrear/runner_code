@@ -25,7 +25,12 @@ wrapDocker {
     )
 }
 
-if (project.property("enable-docker")?.toString()?.toBoolean() == true) {
+val dockerEnabled = project.property("enable-docker")?.toString()?.toBoolean()?.or(false) ?: false
+val buildRunnerCode = project.property("build-runner-code")?.toString()?.toBoolean()?.or(false) ?: false
+
+println("DockerEnabled: $dockerEnabled")
+
+if (dockerEnabled && buildRunnerCode) {
     tasks.getByPath("jar").finalizedBy("buildDocker")
 
     tasks.getByPath("jar").doLast {
@@ -36,12 +41,13 @@ if (project.property("enable-docker")?.toString()?.toBoolean() == true) {
     tasks.register("buildDocker") {
         dependsOn("bootJar", "startRegistry", "pgVectorPostgresDockerImage", "pushImages")
     }
+
     afterEvaluate {
 
         tasks.register("startRegistry") {
             println("Starting Registry...")
 
-            exec {
+            providers.exec {
                 workingDir("runner_code/src/main/docker")
                 commandLine("/usr/local/bin/docker-compose", "up", "-d")
             }
