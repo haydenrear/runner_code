@@ -47,8 +47,8 @@ if (dockerEnabled && buildRunnerCode) {
         tasks.register("startRegistry") {
             println("Starting Registry...")
 
-            providers.exec {
-                workingDir("runner_code/src/main/docker")
+            exec {
+                workingDir(projectDir.resolve("src/main/docker"))
                 commandLine("/usr/local/bin/docker-compose", "up", "-d")
             }
         }
