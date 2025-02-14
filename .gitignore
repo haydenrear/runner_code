@@ -47,3 +47,5 @@ build/
 
 .images/*out/
 src/main/docker/.images/**
+
+*.pem
