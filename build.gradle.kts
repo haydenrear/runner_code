@@ -21,6 +21,11 @@ wrapDocker {
             "localhost:5001/jdk",
             "${project.projectDir}/src/main/docker/jdk",
             "jdk"
+        ),
+        DockerContext(
+            "localhost:5001/python",
+            "${project.projectDir}/src/main/docker/python",
+            "python"
         )
     )
 }

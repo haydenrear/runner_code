@@ -1,3 +1,0 @@
-[submodule "dockerfiles"]
-	path = dockerfiles
-	url = ./dockerfiles

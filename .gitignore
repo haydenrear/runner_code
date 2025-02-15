@@ -10,7 +10,6 @@ build/
 .gradle/
 *.hprof
 phx/*
-src/main/docker/
 
 ### STS ###
 .apt_generated
