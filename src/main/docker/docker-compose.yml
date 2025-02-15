@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  local-registry:
+    image: registry:2
+    environment:
+      REGISTRY_HTTP_TLS_CERTIFICATE: /certs/cert.pem
+      REGISTRY_HTTP_TLS_KEY: /certs/key.pem
+    ports:
+      - "5001:5000"
+    volumes:
+      - ./.images:/var/lib/registry
+      - ./certs:/certs
+    restart: unless-stopped
+
+volumes:
+  registry-data: {}
