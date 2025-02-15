@@ -11,6 +11,8 @@ build/
 *.hprof
 phx/*
 src/main/docker/.images
+.images
+src/main/docker/.images/**
 ### STS ###
 .apt_generated
 .classpath
