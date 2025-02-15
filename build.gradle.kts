@@ -44,7 +44,7 @@ if (dockerEnabled && buildRunnerCode) {
     }
 
     tasks.register("buildDocker") {
-        dependsOn("bootJar", "startRegistry", "pgVectorPostgresDockerImage", "pushImages")
+        dependsOn("bootJar", "startRegistry", "pgVectorPostgresDockerImage", "pythonDockerImage", "jdkDockerImage", "pushImages")
     }
 
     afterEvaluate {
