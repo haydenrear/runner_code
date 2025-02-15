@@ -10,7 +10,7 @@ build/
 .gradle/
 *.hprof
 phx/*
-
+src/main/docker/.images
 ### STS ###
 .apt_generated
 .classpath
