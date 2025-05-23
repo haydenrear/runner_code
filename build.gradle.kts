@@ -2,13 +2,18 @@ import Com_hayden_docker_gradle.DockerContext;
 
 plugins {
     id("com.hayden.docker")
+    id("com.hayden.jpa-persistence")
+    id("com.hayden.spring-app")
+    id("com.hayden.graphql-data-service")
+    id("com.hayden.discovery-app")
+    id("com.hayden.messaging")
+    id("com.hayden.docker-compose")
 }
 
 group = "com.hayden"
 version = "0.0.1-SNAPSHOT"
 
 tasks.register("prepareKotlinBuildScriptModel") {}
-
 
 wrapDocker {
     ctx = arrayOf(
