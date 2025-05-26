@@ -33,6 +33,11 @@ RUN apt-get update && \
 
 COPY init-pgvector.sql /docker-entrypoint-initdb.d/
 
+# Enable logical replication for CDC
+RUN echo "wal_level = logical" >> /usr/share/postgresql/postgresql.conf.sample
+RUN echo "max_wal_senders = 8" >> /usr/share/postgresql/postgresql.conf.sample
+RUN echo "max_replication_slots = 8" >> /usr/share/postgresql/postgresql.conf.sample
+
 WORKDIR /
 EXPOSE 5432
 
