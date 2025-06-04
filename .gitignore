@@ -50,3 +50,4 @@ build/
 src/main/docker/.images/**
 
 *.pem
+.DS_Store
