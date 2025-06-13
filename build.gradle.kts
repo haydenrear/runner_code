@@ -1,4 +1,5 @@
 import Com_hayden_docker_gradle.DockerContext;
+import java.nio.file.Paths
 
 plugins {
     id("com.hayden.docker")
@@ -50,6 +51,11 @@ if (dockerEnabled && buildRunnerCode) {
 
     tasks.register("buildDocker") {
         dependsOn("bootJar", "startRegistry", "pgVectorPostgresDockerImage", "pythonDockerImage", "jdkDockerImage", "pushImages")
+        doLast {
+            delete(fileTree(Paths.get(projectDir.path, "src/main/docker")) {
+                include("**/*.jar")
+            })
+        }
     }
 
     afterEvaluate {
