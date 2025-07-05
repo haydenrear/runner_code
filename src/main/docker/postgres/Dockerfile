@@ -1,4 +1,4 @@
-ARG PG_MAJOR=15
+ARG PG_MAJOR=17
 
 FROM postgres:${PG_MAJOR}
 
@@ -6,7 +6,8 @@ RUN apt-get update && \
     apt-mark hold locales && \
     apt-get install -y --no-install-recommends \
         build-essential \
-        postgresql-server-dev-${PG_MAJOR}
+        postgresql-server-dev-${PG_MAJOR} \
+        postgresql-contrib-${PG_MAJOR}
 
 WORKDIR /tmp
 
