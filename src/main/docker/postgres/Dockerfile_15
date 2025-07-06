@@ -1,4 +1,4 @@
-ARG PG_MAJOR=17
+ARG PG_MAJOR=15
 
 FROM postgres:${PG_MAJOR}
 
@@ -6,8 +6,7 @@ RUN apt-get update && \
     apt-mark hold locales && \
     apt-get install -y --no-install-recommends \
         build-essential \
-        postgresql-server-dev-${PG_MAJOR} \
-        postgresql-contrib-${PG_MAJOR}
+        postgresql-server-dev-${PG_MAJOR}
 
 WORKDIR /tmp
 
@@ -32,7 +31,7 @@ RUN apt-get update && \
 		apt-mark unhold locales && \
 		rm -rf /var/lib/apt/lists/*
 
-COPY init-pgvector.sql /docker-entrypoint-initdb.d
+COPY init-pgvector_15.sql /docker-entrypoint-initdb.d/
 
 # Enable logical replication for CDC
 RUN echo "wal_level = logical" >> /usr/share/postgresql/postgresql.conf.sample
