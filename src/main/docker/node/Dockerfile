@@ -6,7 +6,7 @@ FROM localhost:5005/python
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG NODE_VERSION=24.2.0
-ARG TARGETARCH
+ARG TARGETARCH=arm64
 
 LABEL org.opencontainers.image.title="node"
 LABEL org.opencontainers.image.description="Base Node image (v24.2.0) atop local python, with tree-sitter-cli preinstalled"
@@ -44,9 +44,6 @@ RUN set -eux; \
 ENV NODE_HOME=/opt/node
 ENV PATH="${NODE_HOME}/bin:${PATH}"
 
-# Install tree-sitter CLI globally and ensure the binary is on PATH
-RUN npm install -g tree-sitter-cli && \
-    ln -sf /opt/node/bin/tree-sitter /usr/local/bin/tree-sitter && \
-    tree-sitter --version
+RUN npm install -g tree-sitter-cli && ln -sf /opt/node/bin/tree-sitter /usr/local/bin/tree-sitter && tree-sitter --version
 
 WORKDIR /home/ubuntu
