@@ -29,6 +29,16 @@ wrapDocker {
             "jdk"
         ),
         DockerContext(
+            "localhost:5005/jdk-codegen",
+            "${project.projectDir}/src/main/docker/jdk-codegen",
+            "jdkCodegen"
+        ),
+        DockerContext(
+            "localhost:5005/node",
+            "${project.projectDir}/src/main/docker/node",
+            "node"
+        ),
+        DockerContext(
             "localhost:5005/python",
             "${project.projectDir}/src/main/docker/python",
             "python"
@@ -50,7 +60,8 @@ if (dockerEnabled && buildRunnerCode) {
     }
 
     tasks.register("buildDocker") {
-        dependsOn("bootJar", "startRegistry", "pgVectorPostgresDockerImage", "pythonDockerImage", "jdkDockerImage", "pushImages")
+        dependsOn("bootJar", "startRegistry", "pgVectorPostgresDockerImage", "pythonDockerImage", "jdkDockerImage", "jdkCodegenDockerImage", "nodeDockerImage",
+                           "pushImages")
         doLast {
             delete(fileTree(Paths.get(projectDir.path, "src/main/docker")) {
                 include("**/*.jar")
