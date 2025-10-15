@@ -19,17 +19,17 @@ tasks.register("prepareKotlinBuildScriptModel") {}
 wrapDocker {
     ctx = arrayOf(
         DockerContext(
-            "localhost:5001/postgres-pgvector",
+            "localhost:5005/postgres-pgvector",
             "${project.projectDir}/src/main/docker/postgres",
             "pgVectorPostgres"
         ),
         DockerContext(
-            "localhost:5001/jdk",
+            "localhost:5005/jdk",
             "${project.projectDir}/src/main/docker/jdk",
             "jdk"
         ),
         DockerContext(
-            "localhost:5001/python",
+            "localhost:5005/python",
             "${project.projectDir}/src/main/docker/python",
             "python"
         )
