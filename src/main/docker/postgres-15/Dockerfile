@@ -31,7 +31,7 @@ RUN apt-get update && \
 		apt-mark unhold locales && \
 		rm -rf /var/lib/apt/lists/*
 
-COPY init-pgvector_15.sql /docker-entrypoint-initdb.d/
+COPY init-pgvector.sql /docker-entrypoint-initdb.d/
 
 # Enable logical replication for CDC
 RUN echo "wal_level = logical" >> /usr/share/postgresql/postgresql.conf.sample

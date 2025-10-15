@@ -1,4 +1,4 @@
-FROM localhost:5005/jdk
+FROM localhost:5005/python
 
 ARG DEBIAN_FRONTEND=noninteractive
 # Pin toolchain versions here for org-wide consistency
@@ -19,6 +19,8 @@ ENV CARGO_HOME=${HOME}/.cargo
 ENV RUSTUP_HOME=${HOME}/.rustup
 ENV GRADLE_HOME=/opt/gradle/gradle-${GRADLE_VERSION}
 ENV PATH=${GRADLE_HOME}/bin:${CARGO_HOME}/bin:/usr/local/bin:${PATH}
+
+RUN uv --version
 
 # System packages
 # - curl, unzip, ca-certificates: downloads and installs
@@ -53,13 +55,6 @@ RUN set -eux; \
     "${CARGO_HOME}/bin/rustc" --version; \
     "${CARGO_HOME}/bin/cargo" --version
 
-# Install uv (pinned) using cargo install
-# Note: Building from source ensures we can pin the version deterministically.
-RUN apt-get update && apt-get install -y python3 python3-pip wget bzip2 ca-certificates libglib2.0-0 libxext6 libsm6 libxrender1 sudo
-RUN apt-get install -y python3-venv
-RUN apt-get install -y python3-toml
-
-RUN python3 -m venv /opt/py && /opt/py/bin/pip install uv==${UV_VERSION} && ln -s /opt/py/bin/uv /usr/local/bin/uv
 
 RUN set -eux; \
     echo "GRADLE_VERSION=${GRADLE_VERSION}"; \

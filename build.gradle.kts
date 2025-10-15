@@ -16,30 +16,39 @@ version = "0.0.1-SNAPSHOT"
 
 tasks.register("prepareKotlinBuildScriptModel") {}
 
+val registryBase = project.property("registryBase") ?: "localhost:5001"
+
+logger.log(LogLevel.INFO, "Found registry base: $registryBase")
+
 wrapDocker {
     ctx = arrayOf(
         DockerContext(
-            "localhost:5005/postgres-pgvector",
+            "${registryBase}/postgres-pgvector",
             "${project.projectDir}/src/main/docker/postgres",
             "pgVectorPostgres"
         ),
         DockerContext(
-            "localhost:5005/jdk",
+            "${registryBase}/postgres-pgvector-15",
+            "${project.projectDir}/src/main/docker/postgres-15",
+            "pgVectorPostgres15"
+        ),
+        DockerContext(
+            "${registryBase}/jdk",
             "${project.projectDir}/src/main/docker/jdk",
             "jdk"
         ),
         DockerContext(
-            "localhost:5005/jdk-codegen",
+            "${registryBase}/jdk-codegen",
             "${project.projectDir}/src/main/docker/jdk-codegen",
             "jdkCodegen"
         ),
         DockerContext(
-            "localhost:5005/node",
+            "${registryBase}/node",
             "${project.projectDir}/src/main/docker/node",
             "node"
         ),
         DockerContext(
-            "localhost:5005/python",
+            "${registryBase}/python",
             "${project.projectDir}/src/main/docker/python",
             "python"
         )
@@ -60,7 +69,8 @@ if (dockerEnabled && buildRunnerCode) {
     }
 
     tasks.register("buildDocker") {
-        dependsOn("bootJar", "startRegistry", "pgVectorPostgresDockerImage", "pythonDockerImage", "jdkDockerImage", "jdkCodegenDockerImage", "nodeDockerImage",
+        dependsOn("bootJar", "startRegistry", "pgVectorPostgres15DockerImage", "pgVectorPostgresDockerImage",
+                           "pythonDockerImage", "jdkDockerImage", "jdkCodegenDockerImage", "nodeDockerImage",
                            "pushImages")
         doLast {
             delete(fileTree(Paths.get(projectDir.path, "src/main/docker")) {
