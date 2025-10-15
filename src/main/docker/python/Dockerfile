@@ -1,5 +1,5 @@
 # Use the official Ubuntu base image
-FROM localhost:5001/jdk
+FROM localhost:5005/jdk
 
 ENV HOME=/home/ubuntu
 # Set environment variables
