@@ -63,12 +63,15 @@ println("DockerEnabled: $dockerEnabled")
 if (dockerEnabled && buildRunnerCode) {
     tasks.getByPath("jar").finalizedBy("buildDocker")
 
+
     tasks.getByPath("jar").doLast {
         tasks.getByPath("pgVectorPostgresDockerImage").dependsOn("startRegistry")
-        tasks.getByPath("pushImages").dependsOn("startRegistry")
     }
 
     tasks.register("buildDocker") {
+        tasks.getByPath("jdkCodegenDockerImage").dependsOn("pythonDockerImage")
+        tasks.getByPath("pythonDockerImage").dependsOn("jdkDockerImage")
+        tasks.getByPath("nodeDockerImage").dependsOn("pythonDockerImage")
         dependsOn("bootJar", "startRegistry", "pgVectorPostgres15DockerImage", "pgVectorPostgresDockerImage",
                            "pythonDockerImage", "jdkDockerImage", "jdkCodegenDockerImage", "nodeDockerImage",
                            "pushImages")
