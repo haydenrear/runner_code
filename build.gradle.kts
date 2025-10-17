@@ -6,7 +6,6 @@ plugins {
     id("com.hayden.jpa-persistence")
     id("com.hayden.spring-app")
     id("com.hayden.graphql-data-service")
-    id("com.hayden.discovery-app")
     id("com.hayden.messaging")
     id("com.hayden.docker-compose")
 }
