@@ -73,8 +73,7 @@ if (dockerEnabled && buildRunnerCode) {
         tasks.getByPath("pythonDockerImage").dependsOn("jdkDockerImage")
         tasks.getByPath("nodeDockerImage").dependsOn("pythonDockerImage")
         dependsOn("bootJar", "startRegistry", "pgVectorPostgres15DockerImage", "pgVectorPostgresDockerImage",
-                           "pythonDockerImage", "jdkDockerImage", "jdkCodegenDockerImage", "nodeDockerImage",
-                           "pushImages")
+                           "pythonDockerImage", "jdkDockerImage", "jdkCodegenDockerImage", "nodeDockerImage")
         doLast {
             delete(fileTree(Paths.get(projectDir.path, "src/main/docker")) {
                 include("**/*.jar")
