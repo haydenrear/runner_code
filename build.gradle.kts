@@ -92,6 +92,8 @@ if (dockerEnabled && buildRunnerCode) {
             }
         }
     }
+} else {
+    tasks.register("runnerTask")
 }
 
 
