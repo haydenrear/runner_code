@@ -3,11 +3,7 @@ import java.nio.file.Paths
 
 plugins {
     id("com.hayden.docker")
-    id("com.hayden.jpa-persistence")
-    id("com.hayden.spring-app")
-    id("com.hayden.graphql-data-service")
     id("com.hayden.messaging")
-    id("com.hayden.docker-compose")
 }
 
 group = "com.hayden"
@@ -63,7 +59,6 @@ if (!dockerEnabled || !buildRunnerCode)
 wrapDocker {
     ctx = dockerImages
 }
-
 
 if (dockerEnabled && buildRunnerCode) {
     tasks.register("runnerTask") {
