@@ -12,6 +12,7 @@ build/
 phx/*
 src/main/docker/.images
 .images
+.k3s-images
 src/main/docker/.images/**
 ### STS ###
 .apt_generated
