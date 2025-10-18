@@ -60,11 +60,11 @@ val buildRunnerCode = project.property("build-runner-code")?.toString()?.toBoole
 println("DockerEnabled: $dockerEnabled")
 
 if (dockerEnabled && buildRunnerCode) {
-    tasks.getByPath("jar").finalizedBy("buildDocker")
-
-    tasks.getByPath("jar").doLast {
-        tasks.getByPath("pgVectorPostgresDockerImage").dependsOn("startRegistry")
+    tasks.register("runnerTask") {
+        dependsOn("buildDocker", "pushImages")
     }
+
+    tasks.getByPath("jar").dependsOn("runnerTask")
 
     tasks.register("buildDocker") {
         tasks.getByPath("jdkCodegenDockerImage").dependsOn("pythonDockerImage")
@@ -75,15 +75,15 @@ if (dockerEnabled && buildRunnerCode) {
         doLast {
             delete(fileTree(Paths.get(projectDir.path, "src/main/docker")) {
                 include("**/*.jar")
-            });
+            })
         }
 
-        finalizedBy("pushImages")
     }
 
     afterEvaluate {
 
         tasks.register("startRegistry") {
+            tasks.getByPath("pgVectorPostgresDockerImage").dependsOn("startRegistry")
             println("Starting Registry...")
 
             exec {
@@ -94,3 +94,9 @@ if (dockerEnabled && buildRunnerCode) {
     }
 }
 
+
+tasks.register("runnerCode") {
+    if (dockerEnabled && buildRunnerCode) {
+        dependsOn("buildDocker")
+    }
+}
