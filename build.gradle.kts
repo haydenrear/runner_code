@@ -19,45 +19,51 @@ val registryBase = project.property("registryBase") ?: "localhost:5005"
 
 logger.log(LogLevel.INFO, "Found registry base: $registryBase")
 
-wrapDocker {
-    ctx = arrayOf(
-        DockerContext(
-            "${registryBase}/postgres-pgvector",
-            "${project.projectDir}/src/main/docker/postgres",
-            "pgVectorPostgres"
-        ),
-        DockerContext(
-            "${registryBase}/postgres-pgvector-15",
-            "${project.projectDir}/src/main/docker/postgres-15",
-            "pgVectorPostgres15"
-        ),
-        DockerContext(
-            "${registryBase}/jdk",
-            "${project.projectDir}/src/main/docker/jdk",
-            "jdk"
-        ),
-        DockerContext(
-            "${registryBase}/jdk-codegen",
-            "${project.projectDir}/src/main/docker/jdk-codegen",
-            "jdkCodegen"
-        ),
-        DockerContext(
-            "${registryBase}/node",
-            "${project.projectDir}/src/main/docker/node",
-            "node"
-        ),
-        DockerContext(
-            "${registryBase}/python",
-            "${project.projectDir}/src/main/docker/python",
-            "python"
-        )
-    )
-}
-
 val dockerEnabled = project.property("enable-docker")?.toString()?.toBoolean()?.or(false) ?: false
 val buildRunnerCode = project.property("build-runner-code")?.toString()?.toBoolean()?.or(false) ?: false
 
 println("DockerEnabled: $dockerEnabled")
+
+var dockerImages = arrayOf(
+    DockerContext(
+        "${registryBase}/postgres-pgvector",
+        "${project.projectDir}/src/main/docker/postgres",
+        "pgVectorPostgres"
+    ),
+    DockerContext(
+        "${registryBase}/postgres-pgvector-15",
+        "${project.projectDir}/src/main/docker/postgres-15",
+        "pgVectorPostgres15"
+    ),
+    DockerContext(
+        "${registryBase}/jdk",
+        "${project.projectDir}/src/main/docker/jdk",
+        "jdk"
+    ),
+    DockerContext(
+        "${registryBase}/jdk-codegen",
+        "${project.projectDir}/src/main/docker/jdk-codegen",
+        "jdkCodegen"
+    ),
+    DockerContext(
+        "${registryBase}/node",
+        "${project.projectDir}/src/main/docker/node",
+        "node"
+    ),
+    DockerContext(
+        "${registryBase}/python",
+        "${project.projectDir}/src/main/docker/python",
+        "python"
+    )
+)
+
+if (!dockerEnabled || !buildRunnerCode)
+    dockerImages = emptyArray<DockerContext>()
+
+wrapDocker {
+    ctx = dockerImages
+}
+
 
 if (dockerEnabled && buildRunnerCode) {
     tasks.register("runnerTask") {
@@ -72,12 +78,6 @@ if (dockerEnabled && buildRunnerCode) {
         tasks.getByPath("nodeDockerImage").dependsOn("pythonDockerImage")
         dependsOn("bootJar", "startRegistry", "pgVectorPostgres15DockerImage", "pgVectorPostgresDockerImage",
                            "pythonDockerImage", "jdkDockerImage", "jdkCodegenDockerImage", "nodeDockerImage")
-        doLast {
-            delete(fileTree(Paths.get(projectDir.path, "src/main/docker")) {
-                include("**/*.jar")
-            })
-        }
-
     }
 
     afterEvaluate {
@@ -94,11 +94,4 @@ if (dockerEnabled && buildRunnerCode) {
     }
 } else {
     tasks.register("runnerTask")
-}
-
-
-tasks.register("runnerCode") {
-    if (dockerEnabled && buildRunnerCode) {
-        dependsOn("buildDocker")
-    }
 }
