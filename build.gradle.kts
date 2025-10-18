@@ -15,7 +15,7 @@ version = "0.0.1-SNAPSHOT"
 
 tasks.register("prepareKotlinBuildScriptModel") {}
 
-val registryBase = project.property("registryBase") ?: "localhost:5001"
+val registryBase = project.property("registryBase") ?: "localhost:5005"
 
 logger.log(LogLevel.INFO, "Found registry base: $registryBase")
 
@@ -62,7 +62,6 @@ println("DockerEnabled: $dockerEnabled")
 if (dockerEnabled && buildRunnerCode) {
     tasks.getByPath("jar").finalizedBy("buildDocker")
 
-
     tasks.getByPath("jar").doLast {
         tasks.getByPath("pgVectorPostgresDockerImage").dependsOn("startRegistry")
     }
@@ -76,8 +75,10 @@ if (dockerEnabled && buildRunnerCode) {
         doLast {
             delete(fileTree(Paths.get(projectDir.path, "src/main/docker")) {
                 include("**/*.jar")
-            })
+            });
         }
+
+        finalizedBy("pushImages")
     }
 
     afterEvaluate {
