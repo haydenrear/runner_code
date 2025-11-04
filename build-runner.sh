@@ -1,0 +1,1 @@
+./gradlew build -Penable-docker=true -Pbuild-runner-code=true
