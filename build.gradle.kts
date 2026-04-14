@@ -55,6 +55,11 @@ var dockerImages = arrayOf(
         "${registryBase}/go-base",
         "${project.projectDir}/src/main/docker/go",
         "goBase"
+    ),
+    DockerContext(
+        "${registryBase}/python-with-docker",
+        "${project.projectDir}/src/main/docker/python-with-docker",
+        "pythonWithDocker"
     )
 )
 
@@ -76,8 +81,10 @@ if (dockerEnabled && buildRunnerCode) {
         tasks.getByPath("jdkCodegenDockerImage").dependsOn("pythonDockerImage")
         tasks.getByPath("pythonDockerImage").dependsOn("jdkDockerImage")
         tasks.getByPath("nodeDockerImage").dependsOn("pythonDockerImage")
+        tasks.getByPath("pythonWithDockerDockerImage").dependsOn("pythonDockerImage")
         dependsOn("bootJar", "startRegistry", "pgVectorPostgres15DockerImage", "pgVectorPostgresDockerImage",
-                           "pythonDockerImage", "jdkDockerImage", "jdkCodegenDockerImage", "nodeDockerImage", "goBaseDockerImage")
+                           "pythonDockerImage", "jdkDockerImage", "jdkCodegenDockerImage", "nodeDockerImage", "goBaseDockerImage",
+                           "pythonWithDockerDockerImage")
     }
 
     afterEvaluate {
